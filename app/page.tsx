@@ -194,7 +194,7 @@ export default function LandingPage() {
                     <CarouselItem key={index}>
                       <Card className="bg-christmas-cream text-christmas-pine">
                         <CardContent className="p-6 text-center">
-                          <p className="text-lg mb-4 italic">"{testimonial.quote}"</p>
+                          <p className="text-lg mb-4 italic">&quot;{testimonial.quote}&quot;</p>
                           <p className="font-semibold text-christmas-red">- {testimonial.name}</p>
                         </CardContent>
                       </Card>
@@ -223,7 +223,7 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-4 gap-8">
               <div>
                 <h3 className="text-lg font-semibold mb-4">About Us</h3>
-                <p>We're passionate about helping you create the perfect Christmas cards for your loved ones.</p>
+                <p>We&quot;re passionate about helping you create the perfect Christmas cards for your loved ones.</p>
               </div>
               <div>
                 <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
