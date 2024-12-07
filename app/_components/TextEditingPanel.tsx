@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { ChromePicker } from 'react-color'
+import { ChromePicker, ColorResult } from 'react-color'
 import { FaFont, FaPalette, FaTextHeight, FaPlus } from 'react-icons/fa'
+import { TextBlock } from '../design/page'
 
 const fonts = [
   { name: 'Cursive', value: 'cursive' },
@@ -9,7 +10,7 @@ const fonts = [
   { name: 'Festive', value: 'Papyrus, fantasy' },
 ]
 
-export default function TextEditingPanel({ textBlocks, setTextBlocks }) {
+export default function TextEditingPanel({ textBlocks, setTextBlocks }: { textBlocks: TextBlock[], setTextBlocks: (textBlocks: TextBlock[]) => void }) {
   const [text, setText] = useState('')
   const [font, setFont] = useState(fonts[0].value)
   const [color, setColor] = useState('#000000')
@@ -74,7 +75,7 @@ export default function TextEditingPanel({ textBlocks, setTextBlocks }) {
           </div>
           {showColorPicker && (
             <div className="absolute mt-2 z-10">
-              <ChromePicker color={color} onChange={(c) => setColor(c.hex)} />
+              <ChromePicker color={color} onChange={(c: ColorResult) => setColor(c.hex)} />
             </div>
           )}
         </div>

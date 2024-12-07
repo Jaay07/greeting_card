@@ -1,7 +1,7 @@
 import { FaWhatsapp, FaInstagram, FaTwitter, FaDownload } from 'react-icons/fa'
 
 export default function ShareDownloadButtons() {
-  const handleShare = (platform) => {
+  const handleShare = (platform: string) => {
     // Implement sharing logic here
     console.log(`Sharing to ${platform}`)
   }

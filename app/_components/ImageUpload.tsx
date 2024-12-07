@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { FaCloudUploadAlt } from 'react-icons/fa'
 
-export default function ImageUpload({ onUpload }) {
+export default function ImageUpload({ onUpload }: { onUpload: (image: string) => void }) {
   const [dragging, setDragging] = useState(false)
 
-  const handleDragOver = (e) => {
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
     setDragging(true)
   }
@@ -13,23 +13,27 @@ export default function ImageUpload({ onUpload }) {
     setDragging(false)
   }
 
-  const handleDrop = (e) => {
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
     setDragging(false)
     const file = e.dataTransfer.files[0]
     handleFile(file)
   }
 
-  const handleFileInput = (e) => {
+  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return
     const file = e.target.files[0]
     handleFile(file)
   }
 
-  const handleFile = (file) => {
+  const handleFile = (file: File) => {
     if (file && file.type.startsWith('image/')) {
       const reader = new FileReader()
       reader.onload = (e) => {
-        onUpload(e.target.result)
+        const result = e.target?.result
+        if (typeof result === 'string') {
+          onUpload(result)
+        }
       }
       reader.readAsDataURL(file)
     }

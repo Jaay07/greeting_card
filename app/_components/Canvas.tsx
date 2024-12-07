@@ -3,11 +3,22 @@
 import { useRef, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import KonvaWrapper from './KonvaWrapper'
+import { KonvaEventObject } from 'konva/lib/Node';
 
-export default function Canvas({ template, uploadedImage, textBlocks, setTextBlocks }) {
+interface CanvasProps {
+  template: { src: string };
+  uploadedImage: string | null;
+  textBlocks: any[];
+  setTextBlocks: (blocks: any[]) => void;
+}
+
+export default function Canvas({ template, uploadedImage, textBlocks, setTextBlocks }: CanvasProps) {
   const stageRef = useRef(null)
   const [selectedId, selectShape] = useState(null)
-  const [images, setImages] = useState({
+  const [images, setImages] = useState<{
+    template: HTMLImageElement | null;
+    uploaded: HTMLImageElement | null;
+  }>({
     template: null,
     uploaded: null,
   })
@@ -34,21 +45,21 @@ export default function Canvas({ template, uploadedImage, textBlocks, setTextBlo
     }
   }, [uploadedImage, mounted])
 
-  const checkDeselect = (e) => {
+  const checkDeselect = (e: KonvaEventObject<MouseEvent | TouchEvent>) => {
     const clickedOnEmpty = e.target === e.target.getStage()
     if (clickedOnEmpty) {
       selectShape(null)
     }
   }
 
-  const handleDragEnd = (e, id) => {
+  const handleDragEnd = (e: KonvaEventObject<MouseEvent | TouchEvent>, id: string) => {
     const updatedBlocks = textBlocks.map((block) =>
       block.id === id ? { ...block, x: e.target.x(), y: e.target.y() } : block
     )
     setTextBlocks(updatedBlocks)
   }
 
-  const handleDeleteText = (id) => {
+  const handleDeleteText = (id: string) => {
     setTextBlocks(textBlocks.filter(block => block.id !== id))
   }
 
@@ -59,7 +70,7 @@ export default function Canvas({ template, uploadedImage, textBlocks, setTextBlo
   return (
     <div className="border border-gray-300 rounded-lg overflow-hidden">
       <KonvaWrapper>
-        {({ Stage, Layer, Image, Text, Group }) => (
+        {({ Stage, Layer, Image, Text, Group }: { Stage: any, Layer: any, Image: any, Text: any, Group: any }) => (
           <Stage
             width={600}
             height={400}
@@ -86,7 +97,7 @@ export default function Canvas({ template, uploadedImage, textBlocks, setTextBlo
                 <Group 
                   key={block.id} 
                   draggable 
-                  onDragEnd={(e) => handleDragEnd(e, block.id)}
+                  onDragEnd={(e: KonvaEventObject<MouseEvent | TouchEvent>) => handleDragEnd(e, block.id)}
                   x={block.x}
                   y={block.y}
                 >

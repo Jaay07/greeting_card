@@ -7,7 +7,13 @@ const templates = [
   { id: 4, name: 'Winter Wonderland', src: '/templates/template4.jpg' },
 ]
 
-export default function TemplateSelection({ onSelect }) {
+type Template = {
+  id: number;
+  name: string;
+  src: string;
+}
+
+export default function TemplateSelection({ onSelect }: { onSelect: (template: Template) => void }) {
   return (
     <div className="bg-white rounded-lg shadow-xl p-6">
       <h2 className="text-2xl font-bold mb-4 text-green-800">Choose a Template</h2>

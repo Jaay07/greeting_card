@@ -14,10 +14,26 @@ const Canvas = dynamic(() => import('../_components/Canvas'), {
   loading: () => <div className="w-full h-[400px] bg-gray-100 rounded-lg animate-pulse" />
 })
 
+// Add type for template
+type Template = {
+  src: string;
+}
+
+// Define a type for text blocks
+export type TextBlock = {
+  id: number;
+  text: string;
+  font: string;
+  color: string;
+  size: number;
+  x: number;
+  y: number;
+};
+
 export default function Design() {
-  const [selectedTemplate, setSelectedTemplate] = useState(null)
-  const [uploadedImage, setUploadedImage] = useState(null)
-  const [textBlocks, setTextBlocks] = useState([])
+  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null)
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null)
+  const [textBlocks, setTextBlocks] = useState<TextBlock[]>([])
 
   const handleBack = () => {
     if (uploadedImage) {
@@ -50,7 +66,7 @@ export default function Design() {
         <div className="bg-white rounded-lg shadow-xl p-6">
           <Suspense fallback={<div className="w-full h-[400px] bg-gray-100 rounded-lg animate-pulse" />}>
             <Canvas
-              template={selectedTemplate}
+              template={selectedTemplate!}
               uploadedImage={uploadedImage}
               textBlocks={textBlocks}
               setTextBlocks={setTextBlocks}
