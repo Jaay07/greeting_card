@@ -1,15 +1,15 @@
-import { nextui } from "@nextui-org/react";
+import type { Config } from "tailwindcss";
+import { fontFamily } from "tailwindcss/defaultTheme";
 
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+const config: Config = {
   darkMode: ["class"],
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
-	],
+  ],
+  prefix: "",
   theme: {
     container: {
       center: true,
@@ -54,14 +54,18 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
         christmas: {
-          red: "#B91C1C", // A deep, rich red
-          green: "#15803D", // A forest green
-          gold: "#D97706", // A warm, inviting gold
-          cream: "#FEFCE8", // A soft, warm off-white
-          pine: "#064E3B", // A deep, dark green
-          berry: "#9F1239", // A deep raspberry color
-          snow: "#F0F9FF", // A very light blue to represent snow
+          red: "#B91C1C",
+          green: "#15803D",
+          gold: "#D97706",
+          cream: "#FEFCE8",
+          pine: "#064E3B",
+          berry: "#9F1239",
+          snow: "#F0F9FF",
         },
+      },
+      fontFamily: {
+        sans: ["var(--font-geist-sans)", ...fontFamily.sans],
+        mono: ["var(--font-geist-mono)", ...fontFamily.mono],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -78,16 +82,17 @@ module.exports = {
           to: { height: 0 },
         },
         snowfall: {
-          '0%': { transform: 'translateY(0) rotate(0deg)' },
-          '100%': { transform: 'translateY(100vh) rotate(360deg)' },
+          "0%": { transform: "translateY(0) rotate(0deg)" },
+          "100%": { transform: "translateY(100vh) rotate(360deg)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        snowfall: 'snowfall 5s linear infinite',
+        snowfall: "snowfall 5s linear infinite",
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), nextui()],
-}
+};
+
+export default config;

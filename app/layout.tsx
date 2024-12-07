@@ -1,22 +1,14 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react"
+import { cn } from "@/lib/utils"
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Merry & Bright!",
-  description: "Here&apos;s to a season of fun, laughter, and good cheer! Enjoy the holidays and make magical memories with loved ones.",
+  description: "Here's to a season of fun, laughter, and good cheer! Enjoy the holidays and make magical memories with loved ones.",
 };
 
 export default function RootLayout({
@@ -25,13 +17,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html lang="en" suppressHydrationWarning>
+      <body className={cn(
+        "min-h-screen bg-background font-sans antialiased",
+        inter.className
+      )}>
+        <main className="relative flex min-h-screen flex-col">
+          <div className="flex-1">{children}</div>
+        </main>
+        <Analytics />
       </body>
-      <Analytics/>
     </html>
   );
 }
