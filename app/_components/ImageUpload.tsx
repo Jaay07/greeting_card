@@ -1,72 +1,53 @@
-import { useState } from 'react'
-import { FaCloudUploadAlt } from 'react-icons/fa'
+import { useCallback, useState } from 'react'
+import { useDropzone } from 'react-dropzone'
+import Image from 'next/image'
 
-export default function ImageUpload({ onUpload }: { onUpload: (image: string) => void }) {
-  const [dragging, setDragging] = useState(false)
+interface ImageUploadProps {
+  onUpload: (file: File) => void
+}
 
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    setDragging(true)
-  }
+export default function ImageUpload({ onUpload }: ImageUploadProps) {
+  const [preview, setPreview] = useState<string | null>(null)
 
-  const handleDragLeave = () => {
-    setDragging(false)
-  }
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    setDragging(false)
-    const file = e.dataTransfer.files[0]
-    handleFile(file)
-  }
-
-  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return
-    const file = e.target.files[0]
-    handleFile(file)
-  }
-
-  const handleFile = (file: File) => {
-    if (file && file.type.startsWith('image/')) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        const result = e.target?.result
-        if (typeof result === 'string') {
-          onUpload(result)
-        }
-      }
-      reader.readAsDataURL(file)
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    if (acceptedFiles.length > 0) {
+      const file = acceptedFiles[0]
+      onUpload(file)
+      setPreview(URL.createObjectURL(file))
     }
-  }
+  }, [onUpload])
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      'image/jpeg': [],
+      'image/png': [],
+      'image/webp': []
+    },
+    multiple: false
+  })
 
   return (
-    <div className="bg-white rounded-lg shadow-xl p-6">
-      <h2 className="text-2xl font-bold mb-4 text-green-800">Upload Your Image</h2>
+    <div className="space-y-4">
       <div
-        className={`border-4 border-dashed p-8 text-center rounded-lg ${
-          dragging ? 'border-green-500 bg-green-100' : 'border-gray-300'
-        }`}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
+        {...getRootProps()}
+        className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-red-500 transition-colors"
       >
-        <FaCloudUploadAlt className="mx-auto text-6xl text-green-500 mb-4" />
-        <p className="mb-4 text-green-800">Drag and drop an image here, or click to select</p>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileInput}
-          className="hidden"
-          id="fileInput"
-        />
-        <label
-          htmlFor="fileInput"
-          className="bg-green-500 text-white px-6 py-3 rounded-full cursor-pointer hover:bg-green-600 transition-colors duration-300 inline-block"
-        >
-          Select Image
-        </label>
+        <input {...getInputProps()} />
+        {isDragActive ? (
+          <p className="text-lg text-red-600">Drop the image here...</p>
+        ) : (
+          <p className="text-lg">
+            Drag & drop your family photo here, or click to select a file
+          </p>
+        )}
       </div>
+      {preview && (
+        <div className="mt-4">
+          <h3 className="text-lg font-semibold mb-2">Uploaded Image Preview:</h3>
+          <Image src={preview} alt="Uploaded image preview" width={200} height={200} className="rounded-lg" />
+        </div>
+      )}
     </div>
   )
 }
-
